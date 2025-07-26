@@ -2,39 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* Medical Design System - Professional Healthcare Interface
+All colors MUST be HSL for consistency.
 */
 
 @layer base {
   :root {
+    /* Medical Blue Theme */
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 213 31% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 213 31% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 213 31% 10%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Medical Primary - Professional Blue */
+    --primary: 205 89% 40%;
+    --primary-foreground: 0 0% 98%;
+    --primary-light: 205 89% 50%;
+    --primary-dark: 205 89% 30%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Medical Secondary - Teal */
+    --secondary: 200 75% 95%;
+    --secondary-foreground: 200 75% 15%;
+    --medical-teal: 177 70% 41%;
+    --medical-teal-light: 177 70% 51%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Neutral Medical Grays */
+    --muted: 210 15% 96%;
+    --muted-foreground: 210 15% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 177 70% 92%;
+    --accent-foreground: 177 70% 15%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Status Colors */
+    --success: 145 63% 42%;
+    --success-foreground: 0 0% 98%;
+    --warning: 48 96% 53%;
+    --warning-foreground: 48 96% 10%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* UI Elements */
+    --border: 210 15% 91%;
+    --input: 210 15% 94%;
+    --ring: 205 89% 40%;
+
+    /* Medical Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(205 89% 40%), hsl(205 89% 50%));
+    --gradient-medical: linear-gradient(135deg, hsl(205 89% 40%), hsl(177 70% 41%));
+    --gradient-hero: linear-gradient(135deg, hsl(205 89% 40%) 0%, hsl(177 70% 41%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(210 15% 98%) 100%);
+
+    /* Medical Shadows */
+    --shadow-medical: 0 4px 20px -4px hsl(205 89% 40% / 0.15);
+    --shadow-card: 0 2px 10px -2px hsl(205 89% 40% / 0.1);
+    --shadow-hover: 0 8px 30px -8px hsl(205 89% 40% / 0.25);
+
+    /* Animations */
+    --transition-medical: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     --radius: 0.5rem;
 
