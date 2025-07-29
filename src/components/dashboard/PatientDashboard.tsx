@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -94,28 +95,34 @@ const PatientDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <Button variant="outline" className="h-auto p-4 flex-col gap-2">
-                <CalendarPlus className="h-8 w-8" />
-                <div className="text-center">
-                  <div className="font-medium">Book Appointment</div>
-                  <div className="text-xs text-muted-foreground">Schedule with a doctor</div>
-                </div>
+              <Button variant="outline" className="h-auto p-4 flex-col gap-2" asChild>
+                <Link to="/appointments">
+                  <CalendarPlus className="h-8 w-8" />
+                  <div className="text-center">
+                    <div className="font-medium">Book Appointment</div>
+                    <div className="text-xs text-muted-foreground">Schedule with a doctor</div>
+                  </div>
+                </Link>
               </Button>
               
-              <Button variant="outline" className="h-auto p-4 flex-col gap-2">
-                <Search className="h-8 w-8" />
-                <div className="text-center">
-                  <div className="font-medium">Find Doctors</div>
-                  <div className="text-xs text-muted-foreground">Browse by department</div>
-                </div>
+              <Button variant="outline" className="h-auto p-4 flex-col gap-2" asChild>
+                <Link to="/find-doctors">
+                  <Search className="h-8 w-8" />
+                  <div className="text-center">
+                    <div className="font-medium">Find Doctors</div>
+                    <div className="text-xs text-muted-foreground">Browse by department</div>
+                  </div>
+                </Link>
               </Button>
               
-              <Button variant="outline" className="h-auto p-4 flex-col gap-2">
-                <FileText className="h-8 w-8" />
-                <div className="text-center">
-                  <div className="font-medium">Medical History</div>
-                  <div className="text-xs text-muted-foreground">View your records</div>
-                </div>
+              <Button variant="outline" className="h-auto p-4 flex-col gap-2" asChild>
+                <Link to="/medical-records">
+                  <FileText className="h-8 w-8" />
+                  <div className="text-center">
+                    <div className="font-medium">Medical History</div>
+                    <div className="text-xs text-muted-foreground">View your records</div>
+                  </div>
+                </Link>
               </Button>
             </div>
           </CardContent>

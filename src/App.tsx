@@ -8,6 +8,12 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
+import AppointmentsPage from "./pages/AppointmentsPage";
+import CalendarPage from "./pages/CalendarPage";
+import MedicalRecordsPage from "./pages/MedicalRecordsPage";
+import DocumentsPage from "./pages/DocumentsPage";
+import DoctorsPage from "./pages/DoctorsPage";
+import DepartmentsPage from "./pages/DepartmentsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +31,36 @@ const App = () => (
             <Route path="/dashboard" element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            } />
+            <Route path="/appointments" element={
+              <ProtectedRoute>
+                <AppointmentsPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/calendar" element={
+              <ProtectedRoute>
+                <CalendarPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/medical-records" element={
+              <ProtectedRoute>
+                <MedicalRecordsPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/documents" element={
+              <ProtectedRoute>
+                <DocumentsPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/doctors" element={
+              <ProtectedRoute>
+                <DoctorsPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/departments" element={
+              <ProtectedRoute>
+                <DepartmentsPage />
               </ProtectedRoute>
             } />
             <Route path="*" element={<NotFound />} />

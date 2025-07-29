@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -93,28 +94,34 @@ const AdminDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <Button variant="outline" className="h-auto p-4 flex-col gap-2">
-                <UserPlus className="h-8 w-8" />
-                <div className="text-center">
-                  <div className="font-medium">Add Doctor</div>
-                  <div className="text-xs text-muted-foreground">Register new medical staff</div>
-                </div>
+              <Button variant="outline" className="h-auto p-4 flex-col gap-2" asChild>
+                <Link to="/doctors">
+                  <UserPlus className="h-8 w-8" />
+                  <div className="text-center">
+                    <div className="font-medium">Manage Doctors</div>
+                    <div className="text-xs text-muted-foreground">Add or edit medical staff</div>
+                  </div>
+                </Link>
               </Button>
               
-              <Button variant="outline" className="h-auto p-4 flex-col gap-2">
-                <Building2 className="h-8 w-8" />
-                <div className="text-center">
-                  <div className="font-medium">Manage Departments</div>
-                  <div className="text-xs text-muted-foreground">Add or edit departments</div>
-                </div>
+              <Button variant="outline" className="h-auto p-4 flex-col gap-2" asChild>
+                <Link to="/departments">
+                  <Building2 className="h-8 w-8" />
+                  <div className="text-center">
+                    <div className="font-medium">Manage Departments</div>
+                    <div className="text-xs text-muted-foreground">Add or edit departments</div>
+                  </div>
+                </Link>
               </Button>
               
-              <Button variant="outline" className="h-auto p-4 flex-col gap-2">
-                <FileText className="h-8 w-8" />
-                <div className="text-center">
-                  <div className="font-medium">View Reports</div>
-                  <div className="text-xs text-muted-foreground">System analytics and reports</div>
-                </div>
+              <Button variant="outline" className="h-auto p-4 flex-col gap-2" asChild>
+                <Link to="/appointments">
+                  <FileText className="h-8 w-8" />
+                  <div className="text-center">
+                    <div className="font-medium">View Appointments</div>
+                    <div className="text-xs text-muted-foreground">System appointments overview</div>
+                  </div>
+                </Link>
               </Button>
             </div>
           </CardContent>

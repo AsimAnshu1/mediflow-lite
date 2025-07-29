@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -93,28 +94,34 @@ const DoctorDashboard: React.FC = () => {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <Button variant="outline" className="h-auto p-4 flex-col gap-2">
-                <Calendar className="h-8 w-8" />
-                <div className="text-center">
-                  <div className="font-medium">View Schedule</div>
-                  <div className="text-xs text-muted-foreground">Check today's appointments</div>
-                </div>
+              <Button variant="outline" className="h-auto p-4 flex-col gap-2" asChild>
+                <Link to="/calendar">
+                  <Calendar className="h-8 w-8" />
+                  <div className="text-center">
+                    <div className="font-medium">View Calendar</div>
+                    <div className="text-xs text-muted-foreground">Check today's appointments</div>
+                  </div>
+                </Link>
               </Button>
               
-              <Button variant="outline" className="h-auto p-4 flex-col gap-2">
-                <FileText className="h-8 w-8" />
-                <div className="text-center">
-                  <div className="font-medium">Patient Records</div>
-                  <div className="text-xs text-muted-foreground">Access medical histories</div>
-                </div>
+              <Button variant="outline" className="h-auto p-4 flex-col gap-2" asChild>
+                <Link to="/medical-records">
+                  <FileText className="h-8 w-8" />
+                  <div className="text-center">
+                    <div className="font-medium">Patient Records</div>
+                    <div className="text-xs text-muted-foreground">Access medical histories</div>
+                  </div>
+                </Link>
               </Button>
               
-              <Button variant="outline" className="h-auto p-4 flex-col gap-2">
-                <User className="h-8 w-8" />
-                <div className="text-center">
-                  <div className="font-medium">Update Profile</div>
-                  <div className="text-xs text-muted-foreground">Manage your information</div>
-                </div>
+              <Button variant="outline" className="h-auto p-4 flex-col gap-2" asChild>
+                <Link to="/documents">
+                  <User className="h-8 w-8" />
+                  <div className="text-center">
+                    <div className="font-medium">Upload Documents</div>
+                    <div className="text-xs text-muted-foreground">Manage medical files</div>
+                  </div>
+                </Link>
               </Button>
             </div>
           </CardContent>
