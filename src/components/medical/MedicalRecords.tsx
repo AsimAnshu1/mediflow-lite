@@ -145,7 +145,12 @@ const MedicalRecords: React.FC<MedicalRecordsProps> = ({ userRole = 'patient' })
       const { error } = await supabase
         .from('medical_records')
         .insert({
-          ...data,
+          patient_id: data.patient_id,
+          appointment_id: data.appointment_id || null,
+          diagnosis: data.diagnosis,
+          treatment: data.treatment,
+          medications: data.medications || null,
+          notes: data.notes || null,
           doctor_id: profile.id,
           vitals: data.vitals ? JSON.stringify(data.vitals) : null,
         });
@@ -342,7 +347,7 @@ const MedicalRecords: React.FC<MedicalRecordsProps> = ({ userRole = 'patient' })
                           <FormItem>
                             <FormLabel>Height (ft/in)</FormLabel>
                             <FormControl>
-                              <Input placeholder="5'8\"" {...field} />
+                              <Input placeholder="5'8&quot;" {...field} />
                             </FormControl>
                           </FormItem>
                         )}
