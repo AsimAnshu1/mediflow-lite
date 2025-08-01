@@ -14,6 +14,7 @@ import MedicalRecordsPage from "./pages/MedicalRecordsPage";
 import DocumentsPage from "./pages/DocumentsPage";
 import DoctorsPage from "./pages/DoctorsPage";
 import DepartmentsPage from "./pages/DepartmentsPage";
+import ProfilePage from "./pages/ProfilePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -61,6 +62,11 @@ const App = () => (
             <Route path="/departments" element={
               <ProtectedRoute>
                 <DepartmentsPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <ProfilePage />
               </ProtectedRoute>
             } />
             <Route path="*" element={<NotFound />} />
