@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,8 +13,28 @@ import {
   Building2,
   Activity 
 } from 'lucide-react';
+import { generateDemoStats, generateDemoRecentAppointments, type DemoStats } from '@/data/demoData';
 
 const AdminDashboard: React.FC = () => {
+  const [stats, setStats] = useState<DemoStats | null>(null);
+  const [recentAppointments, setRecentAppointments] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Generate initial data
+    setStats(generateDemoStats());
+    setRecentAppointments(generateDemoRecentAppointments());
+
+    // Refresh data every 30 seconds
+    const interval = setInterval(() => {
+      setStats(generateDemoStats());
+      setRecentAppointments(generateDemoRecentAppointments());
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!stats) return <div>Loading...</div>;
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -34,9 +54,9 @@ const AdminDashboard: React.FC = () => {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">2,341</div>
+              <div className="text-2xl font-bold">{stats.totalPatients.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground">
-                <span className="text-success">+12%</span> from last month
+                <span className="text-success">+{Math.floor(Math.random() * 20)}%</span> from last month
               </p>
             </CardContent>
           </Card>
@@ -47,9 +67,9 @@ const AdminDashboard: React.FC = () => {
               <UserPlus className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">89</div>
+              <div className="text-2xl font-bold">{stats.activeDoctors}</div>
               <p className="text-xs text-muted-foreground">
-                <span className="text-success">+3</span> new this month
+                <span className="text-success">+{Math.floor(Math.random() * 5)}</span> new this month
               </p>
             </CardContent>
           </Card>
@@ -60,9 +80,9 @@ const AdminDashboard: React.FC = () => {
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">156</div>
+              <div className="text-2xl font-bold">{stats.appointmentsToday}</div>
               <p className="text-xs text-muted-foreground">
-                <span className="text-warning">+8%</span> from yesterday
+                <span className="text-warning">+{Math.floor(Math.random() * 15)}%</span> from yesterday
               </p>
             </CardContent>
           </Card>
@@ -73,9 +93,9 @@ const AdminDashboard: React.FC = () => {
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">$12,456</div>
+              <div className="text-2xl font-bold">${stats.revenue.toLocaleString()}</div>
               <p className="text-xs text-muted-foreground">
-                <span className="text-success">+23%</span> from last month
+                <span className="text-success">+{Math.floor(Math.random() * 30)}%</span> from last month
               </p>
             </CardContent>
           </Card>
@@ -136,16 +156,16 @@ const AdminDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {[1, 2, 3].map((item) => (
-                  <div key={item} className="flex items-center justify-between">
+                {recentAppointments.map((appointment, index) => (
+                  <div key={index} className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="h-2 w-2 rounded-full bg-primary"></div>
                       <div>
-                        <p className="text-sm font-medium">John Doe</p>
-                        <p className="text-xs text-muted-foreground">Dr. Smith - Cardiology</p>
+                        <p className="text-sm font-medium">{appointment.patient}</p>
+                        <p className="text-xs text-muted-foreground">{appointment.doctor} - {appointment.department}</p>
                       </div>
                     </div>
-                    <Badge variant="outline">Today 2:30 PM</Badge>
+                    <Badge variant="outline">{appointment.time}</Badge>
                   </div>
                 ))}
               </div>

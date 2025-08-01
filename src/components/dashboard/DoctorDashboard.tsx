@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,8 +13,34 @@ import {
   Activity,
   User
 } from 'lucide-react';
+import { generateDemoStats, generateDemoAppointments, generateDemoPatientUpdates, type DemoStats, type DemoAppointment, type DemoPatientUpdate } from '@/data/demoData';
 
 const DoctorDashboard: React.FC = () => {
+  const [stats, setStats] = useState<DemoStats | null>(null);
+  const [todaySchedule, setTodaySchedule] = useState<DemoAppointment[]>([]);
+  const [patientUpdates, setPatientUpdates] = useState<DemoPatientUpdate[]>([]);
+
+  useEffect(() => {
+    // Generate initial data
+    setStats(generateDemoStats());
+    setTodaySchedule(generateDemoAppointments(4, 'doctor'));
+    setPatientUpdates(generateDemoPatientUpdates());
+
+    // Refresh data every 30 seconds
+    const interval = setInterval(() => {
+      setStats(generateDemoStats());
+      setTodaySchedule(generateDemoAppointments(4, 'doctor'));
+      setPatientUpdates(generateDemoPatientUpdates());
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  if (!stats) return <div>Loading...</div>;
+
+  const pendingCount = todaySchedule.filter(apt => apt.status === 'pending').length;
+  const scheduledCount = todaySchedule.filter(apt => apt.status === 'confirmed').length;
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -34,9 +60,9 @@ const DoctorDashboard: React.FC = () => {
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">12</div>
+              <div className="text-2xl font-bold">{stats.todayAppointments}</div>
               <p className="text-xs text-muted-foreground">
-                3 pending, 9 scheduled
+                {pendingCount} pending, {scheduledCount} scheduled
               </p>
             </CardContent>
           </Card>
@@ -47,9 +73,9 @@ const DoctorDashboard: React.FC = () => {
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">156</div>
+              <div className="text-2xl font-bold">{stats.totalPatientsForDoctor}</div>
               <p className="text-xs text-muted-foreground">
-                <span className="text-success">+8</span> new this week
+                <span className="text-success">+{Math.floor(Math.random() * 10)}</span> new this week
               </p>
             </CardContent>
           </Card>
@@ -60,7 +86,7 @@ const DoctorDashboard: React.FC = () => {
               <Stethoscope className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">89</div>
+              <div className="text-2xl font-bold">{stats.consultations}</div>
               <p className="text-xs text-muted-foreground">
                 This month
               </p>
@@ -73,9 +99,9 @@ const DoctorDashboard: React.FC = () => {
               <Clock className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">2:30</div>
+              <div className="text-2xl font-bold">{stats.nextAppointment.time.split(' ')[0]}</div>
               <p className="text-xs text-muted-foreground">
-                PM - Sarah Johnson
+                {stats.nextAppointment.time.split(' ')[1]} - {stats.nextAppointment.patient}
               </p>
             </CardContent>
           </Card>
@@ -136,12 +162,7 @@ const DoctorDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {[
-                  { time: "9:00 AM", patient: "Sarah Johnson", type: "Check-up", status: "confirmed" },
-                  { time: "10:30 AM", patient: "Mike Brown", type: "Follow-up", status: "confirmed" },
-                  { time: "2:30 PM", patient: "Emily Davis", type: "Consultation", status: "pending" },
-                  { time: "4:00 PM", patient: "Robert Wilson", type: "Check-up", status: "confirmed" }
-                ].map((appointment, index) => (
+                {todaySchedule.map((appointment, index) => (
                   <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-3">
                       <div className="text-sm font-medium text-primary">{appointment.time}</div>
@@ -166,13 +187,14 @@ const DoctorDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {[
-                  { patient: "Sarah Johnson", update: "Lab results updated", time: "2 hours ago" },
-                  { patient: "Mike Brown", update: "Prescription renewed", time: "4 hours ago" },
-                  { patient: "Emily Davis", update: "New symptoms recorded", time: "1 day ago" }
-                ].map((update, index) => (
+                {patientUpdates.map((update, index) => (
                   <div key={index} className="flex items-center gap-3 p-3 border rounded-lg">
-                    <div className="h-2 w-2 rounded-full bg-medical-teal"></div>
+                    <div className={`h-2 w-2 rounded-full ${
+                      update.type === 'lab' ? 'bg-blue-500' :
+                      update.type === 'prescription' ? 'bg-green-500' :
+                      update.type === 'symptoms' ? 'bg-orange-500' :
+                      'bg-medical-teal'
+                    }`}></div>
                     <div className="flex-1">
                       <p className="text-sm font-medium">{update.patient}</p>
                       <p className="text-xs text-muted-foreground">{update.update}</p>

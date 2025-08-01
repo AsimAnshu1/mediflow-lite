@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import DashboardLayout from '@/components/layout/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -14,8 +14,48 @@ import {
   CalendarPlus,
   Search
 } from 'lucide-react';
+import { generateDemoAppointments, type DemoAppointment } from '@/data/demoData';
 
 const PatientDashboard: React.FC = () => {
+  const [upcomingAppointments, setUpcomingAppointments] = useState<DemoAppointment[]>([]);
+  const [stats, setStats] = useState({
+    upcomingCount: 0,
+    medicalRecords: 0,
+    healthScore: 0,
+    prescriptions: 0,
+    nextAppointment: ''
+  });
+
+  useEffect(() => {
+    // Generate initial data
+    const appointments = generateDemoAppointments(3, 'patient');
+    setUpcomingAppointments(appointments);
+    
+    const newStats = {
+      upcomingCount: appointments.length,
+      medicalRecords: Math.floor(Math.random() * 20) + 5,
+      healthScore: Math.floor(Math.random() * 15) + 75,
+      prescriptions: Math.floor(Math.random() * 4) + 1,
+      nextAppointment: appointments[0]?.time || 'No appointments'
+    };
+    setStats(newStats);
+
+    // Refresh data every 30 seconds
+    const interval = setInterval(() => {
+      const newAppointments = generateDemoAppointments(3, 'patient');
+      setUpcomingAppointments(newAppointments);
+      setStats({
+        upcomingCount: newAppointments.length,
+        medicalRecords: Math.floor(Math.random() * 20) + 5,
+        healthScore: Math.floor(Math.random() * 15) + 75,
+        prescriptions: Math.floor(Math.random() * 4) + 1,
+        nextAppointment: newAppointments[0]?.time || 'No appointments'
+      });
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -35,9 +75,9 @@ const PatientDashboard: React.FC = () => {
               <Calendar className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">3</div>
+              <div className="text-2xl font-bold">{stats.upcomingCount}</div>
               <p className="text-xs text-muted-foreground">
-                Next: Tomorrow 2:30 PM
+                Next: {stats.nextAppointment}
               </p>
             </CardContent>
           </Card>
@@ -48,9 +88,9 @@ const PatientDashboard: React.FC = () => {
               <FileText className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">12</div>
+              <div className="text-2xl font-bold">{stats.medicalRecords}</div>
               <p className="text-xs text-muted-foreground">
-                Last updated yesterday
+                Last updated {Math.floor(Math.random() * 7) + 1} days ago
               </p>
             </CardContent>
           </Card>
@@ -61,9 +101,9 @@ const PatientDashboard: React.FC = () => {
               <Heart className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">85%</div>
+              <div className="text-2xl font-bold">{stats.healthScore}%</div>
               <p className="text-xs text-muted-foreground">
-                <span className="text-success">+5%</span> improvement
+                <span className="text-success">+{Math.floor(Math.random() * 10)}%</span> improvement
               </p>
             </CardContent>
           </Card>
@@ -74,9 +114,9 @@ const PatientDashboard: React.FC = () => {
               <Activity className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">2</div>
+              <div className="text-2xl font-bold">{stats.prescriptions}</div>
               <p className="text-xs text-muted-foreground">
-                1 expires next week
+                {Math.floor(Math.random() * 2) ? 'All current' : '1 expires next week'}
               </p>
             </CardContent>
           </Card>
@@ -137,40 +177,18 @@ const PatientDashboard: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {[
-                  { 
-                    date: "Tomorrow", 
-                    time: "2:30 PM", 
-                    doctor: "Dr. Sarah Smith", 
-                    department: "Cardiology",
-                    type: "Check-up"
-                  },
-                  { 
-                    date: "Dec 28", 
-                    time: "10:00 AM", 
-                    doctor: "Dr. Mike Johnson", 
-                    department: "General Medicine",
-                    type: "Follow-up"
-                  },
-                  { 
-                    date: "Jan 5", 
-                    time: "3:45 PM", 
-                    doctor: "Dr. Emily Brown", 
-                    department: "Dermatology",
-                    type: "Consultation"
-                  }
-                ].map((appointment, index) => (
+                {upcomingAppointments.map((appointment, index) => (
                   <div key={index} className="p-4 border rounded-lg space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Calendar className="h-4 w-4 text-primary" />
-                        <span className="font-medium text-sm">{appointment.date} at {appointment.time}</span>
+                        <span className="font-medium text-sm">{appointment.time}</span>
                       </div>
                       <Badge variant="outline">{appointment.type}</Badge>
                     </div>
                     <div className="text-sm">
-                      <p className="font-medium">{appointment.doctor}</p>
-                      <p className="text-muted-foreground">{appointment.department}</p>
+                      <p className="font-medium">{appointment.doctor || 'Dr. TBD'}</p>
+                      <p className="text-muted-foreground">{appointment.department || 'General Medicine'}</p>
                     </div>
                   </div>
                 ))}
@@ -190,10 +208,10 @@ const PatientDashboard: React.FC = () => {
                     <Heart className="h-4 w-4 text-red-500" />
                     <div>
                       <p className="text-sm font-medium">Blood Pressure</p>
-                      <p className="text-xs text-muted-foreground">Last checked: 2 days ago</p>
+                      <p className="text-xs text-muted-foreground">Last checked: {Math.floor(Math.random() * 5) + 1} days ago</p>
                     </div>
                   </div>
-                  <span className="text-sm font-medium">120/80</span>
+                  <span className="text-sm font-medium">{Math.floor(Math.random() * 20) + 110}/{Math.floor(Math.random() * 15) + 70}</span>
                 </div>
                 
                 <div className="flex items-center justify-between p-3 border rounded-lg">
@@ -204,7 +222,7 @@ const PatientDashboard: React.FC = () => {
                       <p className="text-xs text-muted-foreground">Resting rate</p>
                     </div>
                   </div>
-                  <span className="text-sm font-medium">72 bpm</span>
+                  <span className="text-sm font-medium">{Math.floor(Math.random() * 20) + 65} bpm</span>
                 </div>
                 
                 <div className="flex items-center justify-between p-3 border rounded-lg">
@@ -212,10 +230,12 @@ const PatientDashboard: React.FC = () => {
                     <FileText className="h-4 w-4 text-green-500" />
                     <div>
                       <p className="text-sm font-medium">Last Lab Results</p>
-                      <p className="text-xs text-muted-foreground">All within normal range</p>
+                      <p className="text-xs text-muted-foreground">{Math.random() > 0.8 ? 'Some abnormal values' : 'All within normal range'}</p>
                     </div>
                   </div>
-                  <Badge variant="default" className="bg-success">Normal</Badge>
+                  <Badge variant="default" className={Math.random() > 0.8 ? 'bg-warning' : 'bg-success'}>
+                    {Math.random() > 0.8 ? 'Review' : 'Normal'}
+                  </Badge>
                 </div>
               </div>
             </CardContent>
